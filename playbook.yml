@@ -1,0 +1,30 @@
+---
+- name: Налаштування локального вебсервера Nginx
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Встановлення Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Створення тестової сторінки
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html lang="uk">
+          <head><meta charset="UTF-8"><title>Ansible Lab</title></head>
+          <body style="text-align: center; margin-top: 50px;">
+              <h1>Привіт! Вебсервер успішно налаштовано через Ansible.</h1>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Запуск та автозапуск Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
